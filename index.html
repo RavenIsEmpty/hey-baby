@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Do You Love Me? 💞</title>
     <link rel="icon" href="heart-logo.png" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -29,6 +32,13 @@
         box-sizing: border-box;
         font-family: "Poppins", sans-serif;
         -webkit-tap-highlight-color: transparent;
+      }
+
+      html,
+      body {
+        touch-action: manipulation; /* kills double-tap zoom */
+        -webkit-text-size-adjust: 100%;
+        overscroll-behavior: none;
       }
 
       body {
@@ -222,6 +232,8 @@
 
       .no-btn.runaway {
         position: fixed;
+        margin: 0;
+        z-index: 50;
         transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
           top 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
@@ -341,8 +353,11 @@
 
         const rect = noBtn.getBoundingClientRect();
         const pad = 16;
-        const maxX = window.innerWidth - rect.width - pad;
-        const maxY = window.innerHeight - rect.height - pad;
+        // Use the real visible area (handles mobile browser bars)
+        const vw = window.visualViewport ? window.visualViewport.width : document.documentElement.clientWidth;
+        const vh = window.visualViewport ? window.visualViewport.height : document.documentElement.clientHeight;
+        const maxX = Math.max(pad, vw - rect.width - pad);
+        const maxY = Math.max(pad, vh - rect.height - pad);
 
         // Avoid landing on top of the Yes button
         const yes = yesBtn.getBoundingClientRect();
@@ -358,12 +373,17 @@
         );
 
         if (!noBtn.classList.contains("runaway")) {
-          // Pin it where it currently is, then let it fly
+          // Move it out of the card: the card's blur/transform would otherwise
+          // make "fixed" relative to the card instead of the screen.
+          document.body.appendChild(noBtn);
           noBtn.style.left = rect.left + "px";
           noBtn.style.top = rect.top + "px";
           noBtn.classList.add("runaway");
           noBtn.getBoundingClientRect(); // force reflow so the move animates
         }
+        // Final clamp so it can never leave the screen
+        x = Math.min(Math.max(pad, x), maxX);
+        y = Math.min(Math.max(pad, y), maxY);
         noBtn.style.left = x + "px";
         noBtn.style.top = y + "px";
 
@@ -409,6 +429,19 @@
           setTimeout(() => h.remove(), 5200);
         }
       });
+
+      // iOS Safari ignores user-scalable=no, so block pinch + double-tap there too
+      document.addEventListener("gesturestart", (e) => e.preventDefault());
+      let lastTap = 0;
+      document.addEventListener(
+        "touchend",
+        (e) => {
+          const now = Date.now();
+          if (now - lastTap < 300) e.preventDefault();
+          lastTap = now;
+        },
+        { passive: false }
+      );
 
       window.addEventListener("resize", () => {
         if (noBtn.classList.contains("runaway")) moveNoButton();
