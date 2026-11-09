@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Do You Love Me? 💞</title>
+    <link rel="icon" href="heart-logo.png" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --pink-1: #ff6f91;
+        --pink-2: #ff9a9e;
+        --pink-3: #fecfef;
+        --accent: #ff3d6e;
+        --accent-dark: #e8285a;
+        --text: #4a2c3a;
+        --muted: #8a6b78;
+        --card: rgba(255, 255, 255, 0.82);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+        overflow: hidden;
+        color: var(--text);
+        background: linear-gradient(-45deg, #ff6f91, #ff9a9e, #fecfef, #ffb6c1);
+        background-size: 400% 400%;
+        animation: bgShift 14s ease infinite;
+      }
+
+      @keyframes bgShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      /* Ambient floating hearts in the background */
+      .bg-hearts {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+
+      .bg-heart {
+        position: absolute;
+        bottom: -40px;
+        color: rgba(255, 255, 255, 0.55);
+        animation: rise linear infinite;
+      }
+
+      @keyframes rise {
+        0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+        10% { opacity: 1; }
+        100% { transform: translateY(-110vh) rotate(25deg); opacity: 0; }
+      }
+
+      /* Card */
+      .card {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 440px;
+        padding: 44px 32px 36px;
+        border-radius: 28px;
+        background: var(--card);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 20px 50px rgba(200, 40, 90, 0.25),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        text-align: center;
+        animation: popIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      @keyframes popIn {
+        from { transform: scale(0.85) translateY(20px); opacity: 0; }
+        to { transform: scale(1) translateY(0); opacity: 1; }
+      }
+
+      /* Refresh button */
+      .refresh-btn {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(255, 61, 110, 0.12);
+        color: var(--accent);
+        font-size: 18px;
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        transition: transform 0.4s ease, background 0.3s ease;
+      }
+
+      .refresh-btn:hover {
+        background: rgba(255, 61, 110, 0.22);
+        transform: rotate(180deg);
+      }
+
+      /* Image */
+      .img-wrap {
+        position: relative;
+        width: 180px;
+        height: 180px;
+        margin: 0 auto 22px;
+        border-radius: 50%;
+        padding: 6px;
+        background: linear-gradient(135deg, var(--pink-1), var(--pink-3));
+        box-shadow: 0 10px 25px rgba(255, 61, 110, 0.3);
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+      }
+
+      .cat-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        background: #fff;
+        border: 4px solid #fff;
+        transition: opacity 0.35s ease, transform 0.35s ease;
+      }
+
+      .cat-img.swap {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      .eyebrow {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 6px;
+      }
+
+      .question {
+        font-family: "Pacifico", cursive;
+        font-weight: 400;
+        font-size: 36px;
+        line-height: 1.25;
+        color: var(--accent);
+        margin-bottom: 8px;
+      }
+
+      .subtitle {
+        font-size: 15px;
+        color: var(--muted);
+        min-height: 24px;
+        margin-bottom: 28px;
+        transition: opacity 0.25s ease;
+      }
+
+      /* Buttons */
+      .btn-group {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+        min-height: 60px;
+      }
+
+      .btn {
+        min-width: 120px;
+        height: 50px;
+        padding: 0 24px;
+        border: none;
+        border-radius: 999px;
+        font-size: 17px;
+        font-weight: 600;
+        cursor: pointer;
+        user-select: none;
+        transition: transform 0.25s ease, box-shadow 0.25s ease,
+          background 0.25s ease;
+      }
+
+      .yes-btn {
+        color: #fff;
+        background: linear-gradient(135deg, var(--accent), #ff7a9c);
+        box-shadow: 0 8px 20px rgba(255, 61, 110, 0.4);
+        transform: scale(var(--yes-scale, 1));
+      }
+
+      .yes-btn:hover {
+        transform: scale(calc(var(--yes-scale, 1) * 1.06));
+        box-shadow: 0 12px 26px rgba(255, 61, 110, 0.5);
+      }
+
+      .no-btn {
+        color: var(--muted);
+        background: #fff;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        z-index: 10;
+      }
+
+      .no-btn.runaway {
+        position: fixed;
+        transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+          top 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      /* Success state */
+      .card.loved .btn-group { display: none; }
+
+      .card.loved .question {
+        animation: heartbeat 1.2s ease-in-out infinite;
+      }
+
+      @keyframes heartbeat {
+        0%, 100% { transform: scale(1); }
+        15% { transform: scale(1.08); }
+        30% { transform: scale(1); }
+        45% { transform: scale(1.05); }
+      }
+
+      /* Burst hearts on Yes */
+      .burst-heart {
+        position: fixed;
+        bottom: -30px;
+        pointer-events: none;
+        z-index: 20;
+        animation: burst 3.8s ease-out forwards;
+      }
+
+      @keyframes burst {
+        0% { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 1; }
+        60% { opacity: 1; }
+        100% {
+          transform: translateY(-105vh) translateX(var(--drift)) scale(1.2)
+            rotate(var(--spin));
+          opacity: 0;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .card { padding: 40px 22px 30px; border-radius: 24px; }
+        .img-wrap { width: 150px; height: 150px; }
+        .question { font-size: 30px; }
+        .btn { min-width: 104px; height: 46px; font-size: 16px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-hearts" aria-hidden="true"></div>
+
+    <main class="card">
+      <button class="refresh-btn" onclick="location.reload()" aria-label="Start over">🔄</button>
+
+      <div class="img-wrap">
+        <img
+          class="cat-img"
+          src="asset/Will_you_be_my_valentine.gif"
+          alt="Cute cat asking a question"
+        />
+      </div>
+
+      <p class="eyebrow">A very important question</p>
+      <h1 class="question">Do you love me?</h1>
+      <p class="subtitle">Take your time… but there's only one right answer 😌</p>
+
+      <div class="btn-group">
+        <button class="btn yes-btn">Yes 💖</button>
+        <button class="btn no-btn">No</button>
+      </div>
+    </main>
+
+    <script>
+      const card = document.querySelector(".card");
+      const question = document.querySelector(".question");
+      const eyebrow = document.querySelector(".eyebrow");
+      const subtitle = document.querySelector(".subtitle");
+      const catImg = document.querySelector(".cat-img");
+      const yesBtn = document.querySelector(".yes-btn");
+      const noBtn = document.querySelector(".no-btn");
+
+      const pleas = [
+        "Are you sure? 🥺",
+        "Think again…",
+        "That button is shy 🙈",
+        "Pretty please? 💕",
+        "My heart can't take this 💔",
+        "You're breaking my heart!",
+        "Wrong button, try the big one 👉",
+        "Nope, not allowed 😤",
+        "Just press Yes already 😭",
+      ];
+      let dodges = 0;
+
+      /* Ambient background hearts */
+      const bg = document.querySelector(".bg-hearts");
+      const bgIcons = ["❤", "♥", "💗", "💕"];
+      for (let i = 0; i < 18; i++) {
+        const h = document.createElement("span");
+        h.className = "bg-heart";
+        h.textContent = bgIcons[i % bgIcons.length];
+        h.style.left = Math.random() * 100 + "%";
+        h.style.fontSize = 12 + Math.random() * 22 + "px";
+        h.style.animationDuration = 8 + Math.random() * 10 + "s";
+        h.style.animationDelay = -Math.random() * 18 + "s";
+        bg.appendChild(h);
+      }
+
+      /* The runaway "No" button */
+      function moveNoButton(e) {
+        if (e) e.preventDefault();
+        if (card.classList.contains("loved")) return;
+
+        const rect = noBtn.getBoundingClientRect();
+        const pad = 16;
+        const maxX = window.innerWidth - rect.width - pad;
+        const maxY = window.innerHeight - rect.height - pad;
+
+        // Avoid landing on top of the Yes button
+        const yes = yesBtn.getBoundingClientRect();
+        let x, y, tries = 0;
+        do {
+          x = pad + Math.random() * (maxX - pad);
+          y = pad + Math.random() * (maxY - pad);
+          tries++;
+        } while (
+          tries < 20 &&
+          x < yes.right + 20 && x + rect.width > yes.left - 20 &&
+          y < yes.bottom + 20 && y + rect.height > yes.top - 20
+        );
+
+        if (!noBtn.classList.contains("runaway")) {
+          // Pin it where it currently is, then let it fly
+          noBtn.style.left = rect.left + "px";
+          noBtn.style.top = rect.top + "px";
+          noBtn.classList.add("runaway");
+          noBtn.getBoundingClientRect(); // force reflow so the move animates
+        }
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+
+        // Grow the Yes button and plead a little
+        dodges++;
+        const scale = Math.min(1 + dodges * 0.12, 1.9);
+        yesBtn.style.setProperty("--yes-scale", scale);
+        subtitle.textContent = pleas[(dodges - 1) % pleas.length];
+      }
+
+      noBtn.addEventListener("mouseenter", moveNoButton);
+      noBtn.addEventListener("touchstart", moveNoButton, { passive: false });
+      noBtn.addEventListener("click", moveNoButton); // keyboard users too
+
+      /* The happy ending */
+      yesBtn.addEventListener("click", () => {
+        if (card.classList.contains("loved")) return;
+        card.classList.add("loved");
+        noBtn.remove();
+
+        catImg.classList.add("swap");
+        setTimeout(() => {
+          catImg.src = "asset/In_Love.jpg";
+          catImg.alt = "Happy cat in love";
+          catImg.classList.remove("swap");
+        }, 350);
+
+        eyebrow.textContent = "I knew it";
+        question.textContent = "I love you too! 💞";
+        subtitle.textContent = "You just made me the happiest person alive 🥰";
+
+        const icons = ["❤️", "💖", "💕", "💗", "💘", "🥰"];
+        for (let i = 0; i < 70; i++) {
+          const h = document.createElement("span");
+          h.className = "burst-heart";
+          h.textContent = icons[Math.floor(Math.random() * icons.length)];
+          h.style.left = Math.random() * 100 + "%";
+          h.style.fontSize = 16 + Math.random() * 24 + "px";
+          h.style.animationDelay = Math.random() * 1.2 + "s";
+          h.style.setProperty("--drift", (Math.random() - 0.5) * 120 + "px");
+          h.style.setProperty("--spin", (Math.random() - 0.5) * 60 + "deg");
+          document.body.appendChild(h);
+          setTimeout(() => h.remove(), 5200);
+        }
+      });
+
+      window.addEventListener("resize", () => {
+        if (noBtn.classList.contains("runaway")) moveNoButton();
+      });
+    </script>
+  </body>
+</html>
